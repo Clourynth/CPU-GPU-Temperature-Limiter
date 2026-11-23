@@ -1,0 +1,10 @@
+# Build output and packaged modules
+/target/
+*.zip
+
+# Editor / OS leftovers
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

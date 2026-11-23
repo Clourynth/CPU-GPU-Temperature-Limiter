@@ -1,0 +1,296 @@
+<!doctype html>
+<!--
+  CPU & GPU Temperature Limiter
+  Copyright (C) 2026  Clourynth
+
+  Credits: nakixii (Magisk_CPULimiter) and ahmed-alnassif.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>CPU &amp; GPU Temperature Limiter</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="splash" id="splash" role="status" aria-live="polite">
+  <div class="splash-cookie"><svg viewBox="-100 -100 200 200" aria-hidden="true"><path id="splash-path" d=""/></svg></div>
+  <p class="splash-text" data-i18n="splash">Connecting to daemon…</p>
+</div>
+
+<div id="scroller" class="scroller">
+<main id="app" class="app" aria-live="polite">
+
+  <header class="bar">
+    <div class="bar-title">
+      <h1 id="page-title">CPU Limiter</h1>
+      <p id="ver" class="bar-sub" data-i18n="loading">Loading…</p>
+    </div>
+    <div class="bar-actions">
+      <div class="lang">
+        <button class="icon-btn lang-btn" id="btn-lang" aria-haspopup="listbox" aria-expanded="false" data-i18n-attr="aria-label=lang.pick"><span id="lang-code">EN</span></button>
+        <ul class="menu" id="lang-menu" role="listbox" hidden data-i18n-attr="aria-label=lang.pick"></ul>
+      </div>
+      <button class="icon-btn" id="btn-log" data-i18n-attr="aria-label=log.view"><svg class="ic" data-i="description"></svg></button>
+    </div>
+  </header>
+
+  <!-- Daemon: shared by both pages, so it never moves when the page changes -->
+    <section class="daemon" id="daemon" aria-label="Daemon">
+      <div class="daemon-main">
+        <div class="daemon-head">
+          <h3 data-i18n="daemon">Daemon</h3>
+          <button class="icon-btn tonal" id="btn-restart" data-i18n-attr="aria-label=daemon.restart"><svg class="ic" data-i="restart_alt"></svg></button>
+        </div>
+        <p class="row-sub" id="daemon-sub" data-i18n="checking">Checking…</p>
+      </div>
+      <span class="switch">
+        <input type="checkbox" id="sw-daemon" role="switch" data-i18n-attr="aria-label=daemon.toggle">
+        <span class="track"><span class="thumb"><svg class="ic" data-i="check"></svg></span></span>
+      </span>
+    </section>
+
+  <div class="page" id="page-cpu">
+    <!-- Current temperature -->
+    <section class="hero" id="hero" data-i18n-attr="aria-label=hero.cpu.aria">
+      <div class="hero-text">
+        <span class="pill" id="state-pill"><i class="dot"></i><span id="state-text" data-i18n="checking">Checking…</span></span>
+        <h2 class="hero-title" data-i18n="hero.cpu.title">Core temperature</h2>
+        <p class="hero-line" id="hero-target">Target —</p>
+        <p class="hero-line hero-note" id="hero-note">&nbsp;</p>
+      </div>
+      <div class="cookie" id="cookie">
+        <div class="cookie-spin"><svg viewBox="-100 -100 200 200" aria-hidden="true"><path id="cookie-path" d=""/></svg></div>
+        <div class="cookie-num"><span id="temp-num">--</span><span class="cookie-unit">°C</span></div>
+      </div>
+      <div class="wave" aria-hidden="true">
+        <div class="wave-layer track"></div>
+        <div class="wave-clip" id="wave-clip"><div class="wave-layer fill"></div></div>
+      </div>
+    </section>
+
+
+    <!-- CPU control -->
+    <section class="group" aria-labelledby="h-cpu-ctl">
+      <h3 id="h-cpu-ctl" data-i18n="cpu.ctl">CPU control</h3>
+      <label class="row-switch" for="sw-cpu-take">
+        <span class="row-main">
+          <span class="row-title" data-i18n="cpu.take">Take over CPU thermal</span>
+          <span class="row-sub" id="cpu-take-sub" data-i18n="cpu.take.sub">Turns off the system's userspace thermal (mi_thermald), CPU hotplug and core control so only this module limits the CPU. When off, everything is restored to the original state.</span>
+        </span>
+        <span class="switch">
+          <input type="checkbox" id="sw-cpu-take" role="switch">
+          <span class="track"><span class="thumb"><svg class="ic" data-i="check"></svg></span></span>
+        </span>
+      </label>
+    </section>
+
+    <!-- Warning when the binary cannot run -->
+    <div class="notice" id="notice" hidden>
+      <svg class="ic" data-i="warning"></svg>
+      <p id="notice-text"></p>
+    </div>
+
+    <!-- Frequency -->
+    <section class="group freq" aria-labelledby="h-freq">
+      <h3 id="h-freq" data-i18n="cpu.freq">CPU frequency</h3>
+      <ul id="freq-list" class="freq-list"></ul>
+    </section>
+
+    <!-- Temperature target -->
+    <section class="group" aria-labelledby="h-target">
+      <h3 id="h-target" data-i18n="t.target">Temperature target</h3>
+      <p class="help" data-i18n="t.target.help">The CPU starts being limited when the core temperature approaches this value.</p>
+      <div id="slider-target"></div>
+
+      <div class="modes" id="modes" role="radiogroup" data-i18n-attr="aria-label=modes.aria"></div>
+
+      <button class="disclose" id="presets-toggle" aria-expanded="false" aria-controls="presets">
+        <span data-i18n="presets">Set the temperature of each mode</span><svg class="ic chev" data-i="expand"></svg>
+      </button>
+      <div class="collapse" id="presets"><div class="collapse-in"><div class="presets" id="presets-in"></div></div></div>
+    </section>
+
+    <!-- Response -->
+    <section class="group" aria-labelledby="h-resp">
+      <h3 id="h-resp" data-i18n="resp">How it reacts</h3>
+      <div class="seg" id="seg-tuning" role="radiogroup" data-i18n-attr="aria-label=tuning.aria">
+        <button role="radio" data-v="raw"><svg class="ic" data-i="bolt"></svg><span data-i18n="tuning.raw">Aggressive</span></button>
+        <button role="radio" data-v="smooth"><svg class="ic" data-i="tune"></svg><span data-i18n="tuning.smooth">Smooth</span></button>
+      </div>
+      <p class="help" id="help-tuning"></p>
+      <p class="warn" id="smooth-warn" hidden><svg class="ic" data-i="warning"></svg><span data-i18n="tuning.smooth.warn">Experimental.</span></p>
+      <div id="smooth-extra" hidden>
+        <div id="slider-smooth-window"></div>
+        <p class="help" data-i18n="smooth.window.help"></p>
+        <div id="slider-smooth-spike"></div>
+        <p class="help" data-i18n="smooth.spike.help"></p>
+      </div>
+
+      <label class="row-switch" for="sw-lowlat">
+        <span class="row-main">
+          <span class="row-title" data-i18n="lowlat">Low latency</span>
+          <span class="row-sub" data-i18n="lowlat.sub">Reads the temperature and writes the frequency every ~8 ms. More responsive, but the CPU wakes up more often.</span>
+        </span>
+        <span class="switch">
+          <input type="checkbox" id="sw-lowlat" role="switch">
+          <span class="track"><span class="thumb"><svg class="ic" data-i="check"></svg></span></span>
+        </span>
+      </label>
+    </section>
+
+    <!-- Sensor -->
+    <section class="group" aria-labelledby="h-sensor">
+      <h3 id="h-sensor" data-i18n="sensor">Temperature sensor</h3>
+      <button class="disclose sensor-toggle" id="sensor-toggle" aria-expanded="false" aria-controls="sensor-box">
+        <span class="row-main"><span class="row-title" id="sensor-title" data-i18n="sensor.auto">Automatic</span><span class="row-sub" id="sensor-sub"></span></span>
+        <svg class="ic chev" data-i="expand"></svg>
+      </button>
+      <div class="collapse" id="sensor-box"><div class="collapse-in"><div class="sensor-box">
+        <input class="field" id="sensor-filter" type="search" autocomplete="off" autocapitalize="off" spellcheck="false" data-i18n-attr="placeholder=sensor.search;aria-label=sensor.search">
+        <ul class="radio-list" id="sensor-list" role="radiogroup" data-i18n-attr="aria-label=sensor"></ul>
+        <p class="help" data-i18n="sensor.help">The daemon restarts automatically when the sensor is changed.</p>
+      </div></div></div>
+    </section>
+
+  </div>
+
+  <div class="page" id="page-gpu" hidden>
+    <div class="gpu-unsupported" id="gpu-unsupported" hidden>
+      <svg class="ic" data-i="memory"></svg>
+      <p data-i18n="gpu.unsupported">This GPU is not supported.</p>
+      <p class="dump-hint" data-i18n="dump.hint">Save this device's GPU and thermal information to a text file, so support for it can be added. Open it first to check it before sharing.</p>
+      <button type="button" class="btn filled" id="btn-dump" data-i18n="dump.btn">Save device data</button>
+      <p class="dump-path" id="dump-path" hidden><span data-i18n="dump.path">Saved to:</span><b id="dump-file"></b></p>
+    </div>
+
+    <div class="pagebody" id="gpu-body">
+      <section class="hero" id="gpu-hero" data-i18n-attr="aria-label=hero.gpu.aria">
+        <div class="hero-text">
+          <span class="pill" id="gpu-pill"><i class="dot"></i><span id="gpu-pill-text" data-i18n="checking">Checking…</span></span>
+          <h2 class="hero-title" data-i18n="hero.gpu.title">GPU temperature</h2>
+          <p class="hero-line" id="gpu-hero-target">Target —</p>
+          <p class="hero-line hero-note" id="gpu-hero-note">&nbsp;</p>
+        </div>
+        <div class="cookie" id="gpu-cookie">
+          <div class="cookie-spin"><svg viewBox="-100 -100 200 200" aria-hidden="true"><path id="gpu-cookie-path" d=""/></svg></div>
+          <div class="cookie-num"><span id="gpu-temp-num">--</span><span class="cookie-unit">°C</span></div>
+        </div>
+        <div class="wave" aria-hidden="true">
+          <div class="wave-layer track"></div>
+          <div class="wave-clip" id="gpu-wave-clip"><div class="wave-layer fill"></div></div>
+        </div>
+      </section>
+
+      <div class="notice" id="gpu-notice" hidden>
+        <svg class="ic" data-i="warning"></svg>
+        <p id="gpu-notice-text"></p>
+      </div>
+
+      <section class="group" aria-labelledby="h-gpu-ctl">
+        <h3 id="h-gpu-ctl" data-i18n="gpu.ctl">GPU control</h3>
+        <label class="row-switch" for="sw-gpu">
+          <span class="row-main">
+            <span class="row-title" data-i18n="gpu.limit">Limit GPU frequency</span>
+            <span class="row-sub" id="gpu-sw-sub" data-i18n="gpu.limit.sub">The daemon keeps the maximum GPU frequency under the ceiling and lowers it when hot. Off: the GPU is fully managed by the system.</span>
+          </span>
+          <span class="switch">
+            <input type="checkbox" id="sw-gpu" role="switch">
+            <span class="track"><span class="thumb"><svg class="ic" data-i="check"></svg></span></span>
+          </span>
+        </label>
+        <label class="row-switch" for="sw-gpu-take">
+          <span class="row-main">
+            <span class="row-title" data-i18n="gpu.take">Take over GPU thermal (HyperOS)</span>
+            <span class="row-sub" id="gpu-take-sub"></span>
+          </span>
+          <span class="switch">
+            <input type="checkbox" id="sw-gpu-take" role="switch">
+            <span class="track"><span class="thumb"><svg class="ic" data-i="check"></svg></span></span>
+          </span>
+        </label>
+      </section>
+
+      <section class="group freq" aria-labelledby="h-gpu-freq">
+        <h3 id="h-gpu-freq" data-i18n="gpu.freq">GPU frequency</h3>
+        <ul id="gpu-freq-list" class="freq-list"></ul>
+        <p class="help" id="gpu-cooling"></p>
+      </section>
+
+      <section class="group" aria-labelledby="h-gpu-max">
+        <h3 id="h-gpu-max" data-i18n="gpu.maxfreq">Maximum frequency limit</h3>
+        <p class="help" data-i18n="gpu.maxfreq.help">The GPU never goes above this value, even when the temperature is very low.</p>
+        <div id="slider-gpu-max"></div>
+      <p class="warn" id="gpu-danger" hidden><svg class="ic" data-i="warning"></svg><span id="gpu-danger-text"></span></p>
+      </section>
+
+      <section class="group" aria-labelledby="h-gpu-temp">
+        <h3 id="h-gpu-temp" data-i18n="gpu.templimit">GPU temperature limit</h3>
+        <p class="help" data-i18n="gpu.templimit.help">Above this temperature the GPU frequency is lowered step by step from the maximum limit, then raised again once it has cooled.</p>
+        <div id="slider-gpu-temp"></div>
+      </section>
+
+      <section class="group" aria-labelledby="h-gpu-sensor">
+        <h3 id="h-gpu-sensor" data-i18n="gpu.sensor">GPU temperature sensor</h3>
+        <button class="disclose sensor-toggle" id="gpu-sensor-toggle" aria-expanded="false" aria-controls="gpu-sensor-box">
+          <span class="row-main"><span class="row-title" id="gpu-sensor-title" data-i18n="sensor.auto">Automatic</span><span class="row-sub" id="gpu-sensor-sub"></span></span>
+          <svg class="ic chev" data-i="expand"></svg>
+        </button>
+        <div class="collapse" id="gpu-sensor-box"><div class="collapse-in"><div class="sensor-box">
+          <input class="field" id="gpu-sensor-filter" type="search" autocomplete="off" autocapitalize="off" spellcheck="false" data-i18n-attr="placeholder=gpu.sensor.search;aria-label=gpu.sensor.search">
+          <ul class="radio-list" id="gpu-sensor-list" role="group" data-i18n-attr="aria-label=gpu.sensor"></ul>
+          <p class="help" data-i18n="gpu.sensor.help">Automatic uses all gpu* sensors. You may pick several sensors; the highest temperature is used. Separate from the CPU sensor.</p>
+        </div></div></div>
+      </section>
+    </div>
+  </div>
+
+  <p class="foot" id="foot"></p>
+</main>
+</div>
+
+<nav class="nav" id="nav" data-i18n-attr="aria-label=nav.pages">
+  <button class="nav-item" data-page="cpu" aria-current="page"><span class="nav-pill"><svg class="ic" data-i="memory"></svg></span><span class="nav-label">CPU</span></button>
+  <button class="nav-item" data-page="gpu"><span class="nav-pill"><svg class="ic" data-i="speed"></svg></span><span class="nav-label">GPU</span></button>
+</nav>
+
+<!-- Save -->
+<div class="savebar" id="savebar" hidden>
+  <button class="btn text" id="btn-discard" data-i18n="discard">Discard</button>
+  <button class="btn filled" id="btn-save"><svg class="ic" data-i="save"></svg><span data-i18n="save">Save</span></button>
+</div>
+
+<!-- Log -->
+<dialog class="sheet" id="sheet" aria-labelledby="sheet-title">
+  <div class="sheet-grab" aria-hidden="true"></div>
+  <div class="sheet-head">
+    <h2 id="sheet-title" data-i18n="log.title">Log</h2>
+    <button class="icon-btn" id="log-refresh" data-i18n-attr="aria-label=log.reload"><svg class="ic" data-i="restart_alt"></svg></button>
+    <button class="icon-btn" id="log-close" data-i18n-attr="aria-label=log.close"><svg class="ic" data-i="close"></svg></button>
+  </div>
+  <pre class="log" id="log-body" tabindex="0" data-i18n="loading">Loading…</pre>
+</dialog>
+
+<div class="snack" id="snack" role="status" aria-live="polite" hidden></div>
+
+<script src="icons.js"></script>
+<script src="lang/en.js"></script>
+<script src="lang/id.js"></script>
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

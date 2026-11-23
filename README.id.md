@@ -23,7 +23,14 @@
 
 ## 📸 Tangkapan layar
 
-<!-- Tangkapan layar ditaruh di sini (taruh file gambarnya di docs/screenshots/) -->
+<div align="center">
+
+<table>
+<tr><td align="center" width="33%"><img src="docs/screenshots/cpu-1-home.jpg" alt="CPU · suhu langsung" width="260"><br><sub>CPU · suhu langsung</sub></td><td align="center" width="33%"><img src="docs/screenshots/cpu-2-frequency.jpg" alt="CPU · frekuensi dan mode" width="260"><br><sub>CPU · frekuensi dan mode</sub></td><td align="center" width="33%"><img src="docs/screenshots/cpu-3-tuning.jpg" alt="CPU · penyetelan dan sensor" width="260"><br><sub>CPU · penyetelan dan sensor</sub></td></tr>
+<tr><td align="center" width="33%"><img src="docs/screenshots/gpu-1-home.jpg" alt="GPU · suhu langsung" width="260"><br><sub>GPU · suhu langsung</sub></td><td align="center" width="33%"><img src="docs/screenshots/gpu-2-frequency.jpg" alt="GPU · batas frekuensi" width="260"><br><sub>GPU · batas frekuensi</sub></td><td align="center" width="33%"><img src="docs/screenshots/gpu-3-limits.jpg" alt="GPU · batas dan sensor" width="260"><br><sub>GPU · batas dan sensor</sub></td></tr>
+</table>
+
+</div>
 
 ## 👋 Ini apa?
 
@@ -111,7 +118,7 @@ Silakan buka issue dan lampirkan file **`/sdcard/Android/naki/clmt/gpu-dump.txt`
 ## 🙏 Kredit
 
 - **[nakixii](https://github.com/nakixii/Magisk_CPULimiter)** untuk *Magisk_CPULimiter* yang asli, dasar ide pembatasan CPU modul ini.
-- **[ahmed-alnassif](https://github.com/ahmed-alnassif)** atas inspirasi untuk sisi GPU.
+- **[ahmed-alnassif](https://github.com/ahmed-alnassif/GPU-Unlocker)** untuk *GPU-Unlocker*, inspirasi sisi GPU.
 - Font **Roboto Flex** dari Google, dipakai di bawah SIL Open Font License (lihat `module/webroot/fonts/`).
 
 Semuanya ditulis dari nol dalam Rust, dengan mempelajari cara kerja aslinya, bukan menyalinnya.

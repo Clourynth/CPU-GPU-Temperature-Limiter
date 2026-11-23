@@ -23,7 +23,14 @@
 
 ## 📸 Screenshots
 
-<!-- Screenshots go here (put the image files in docs/screenshots/) -->
+<div align="center">
+
+<table>
+<tr><td align="center" width="33%"><img src="docs/screenshots/cpu-1-home.jpg" alt="CPU · live temperature" width="260"><br><sub>CPU · live temperature</sub></td><td align="center" width="33%"><img src="docs/screenshots/cpu-2-frequency.jpg" alt="CPU · frequency and modes" width="260"><br><sub>CPU · frequency and modes</sub></td><td align="center" width="33%"><img src="docs/screenshots/cpu-3-tuning.jpg" alt="CPU · tuning and sensor" width="260"><br><sub>CPU · tuning and sensor</sub></td></tr>
+<tr><td align="center" width="33%"><img src="docs/screenshots/gpu-1-home.jpg" alt="GPU · live temperature" width="260"><br><sub>GPU · live temperature</sub></td><td align="center" width="33%"><img src="docs/screenshots/gpu-2-frequency.jpg" alt="GPU · frequency limit" width="260"><br><sub>GPU · frequency limit</sub></td><td align="center" width="33%"><img src="docs/screenshots/gpu-3-limits.jpg" alt="GPU · limits and sensor" width="260"><br><sub>GPU · limits and sensor</sub></td></tr>
+</table>
+
+</div>
 
 ## 👋 What is this?
 
@@ -111,7 +118,7 @@ Please open an issue and include the file **`/sdcard/Android/naki/clmt/gpu-dump.
 ## 🙏 Credits
 
 - **[nakixii](https://github.com/nakixii/Magisk_CPULimiter)** for the original *Magisk_CPULimiter*, the idea this module's CPU limiting is based on.
-- **[ahmed-alnassif](https://github.com/ahmed-alnassif)** for the inspiration behind the GPU side.
+- **[ahmed-alnassif](https://github.com/ahmed-alnassif/GPU-Unlocker)** for *GPU-Unlocker*, the inspiration behind the GPU side.
 - **Roboto Flex** font by Google, used under the SIL Open Font License (see `module/webroot/fonts/`).
 
 Everything here was written from scratch in Rust, studying how the original works rather than copying it.

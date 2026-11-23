@@ -39,7 +39,7 @@ This is where it all starts: a small, friendly limiter that keeps your phone coo
 
 ### 🙏 Thanks
 
-Big thanks to **nakixii** for the original *Magisk_CPULimiter* and to **ahmed-alnassif** for the inspiration. And thank you for being here at the start. If you try it, please share how it went by opening an issue. Every report helps! 💚
+Big thanks to [**nakixii**](https://github.com/nakixii/Magisk_CPULimiter) for the original *Magisk_CPULimiter* and to [**ahmed-alnassif**](https://github.com/ahmed-alnassif/GPU-Unlocker) for *GPU-Unlocker*, the inspiration behind the GPU side. And thank you for being here at the start. If you try it, please share how it went by opening an issue. Every report helps! 💚
 
 ---
 
@@ -82,4 +82,4 @@ Inilah awal dari semuanya: limiter kecil yang ramah, yang menjaga ponsel tetap a
 
 ### 🙏 Terima kasih
 
-Terima kasih besar untuk **nakixii** atas *Magisk_CPULimiter* yang asli dan **ahmed-alnassif** atas inspirasinya. Dan terima kasih sudah hadir sejak awal. Kalau Anda mencobanya, ceritakan hasilnya lewat issue. Setiap laporan sangat membantu! 💚
+Terima kasih besar untuk [**nakixii**](https://github.com/nakixii/Magisk_CPULimiter) atas *Magisk_CPULimiter* yang asli dan [**ahmed-alnassif**](https://github.com/ahmed-alnassif/GPU-Unlocker) atas *GPU-Unlocker*, inspirasi sisi GPU. Dan terima kasih sudah hadir sejak awal. Kalau Anda mencobanya, ceritakan hasilnya lewat issue. Setiap laporan sangat membantu! 💚

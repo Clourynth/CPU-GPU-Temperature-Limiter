@@ -2,5 +2,6 @@ id=cpu_limiter_rs
 name=CPU & GPU Temperature Limiter
 version=R.01
 versionCode=1
+updateJson=https://raw.githubusercontent.com/Clourynth/CPU-GPU-Temperature-Limiter/main/update.json
 author=Clourynth - Credits to nakixii & ahmed-alnassif
 description=🟢 Daemon running · 🎛️ Custom 74°C · 🎮 GPU off — CPU and GPU frequency limiter based on temperature.

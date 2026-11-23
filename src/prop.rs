@@ -202,4 +202,12 @@ mod tests {
         assert_eq!(with_description(src, "baru"), "id=x\nname=Y\ndescription=baru\nversion=1\n");
         assert_eq!(with_description("id=x\n", "baru"), "id=x\ndescription=baru\n");
     }
+
+    #[test]
+    fn update_json_line_survives_status_refresh() {
+        let src = "id=x\nversionCode=1\nupdateJson=https://example.org/update.json\ndescription=lama\n";
+        let out = with_description(src, "baru");
+        assert!(out.contains("updateJson=https://example.org/update.json\n"), "{out}");
+        assert!(out.contains("versionCode=1\n") && out.contains("description=baru\n"));
+    }
 }

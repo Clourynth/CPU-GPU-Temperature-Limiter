@@ -4,12 +4,12 @@
 
 **Keep your phone cool without guessing.** Set a target temperature, and the module quietly adjusts the CPU and GPU speed to stay under it, all from a clean, modern WebUI.
 
-[![Version](https://img.shields.io/badge/version-R.01-00796B?style=for-the-badge)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-R.01-00796B?style=for-the-badge)](https://github.com/Clourynth/CPU-GPU-Temperature-Limiter/releases)
 [![License](https://img.shields.io/badge/license-GPLv3-blue?style=for-the-badge)](LICENSE)
 [![Android](https://img.shields.io/badge/Android-arm64-3DDC84?style=for-the-badge&logo=android&logoColor=white)](#-compatibility)
-[![Rust](https://img.shields.io/badge/Rust-single_binary-DEA584?style=for-the-badge&logo=rust&logoColor=black)](#-how-it-works)
-[![KernelSU](https://img.shields.io/badge/KernelSU-Next_%2B_WebUI-5C6BC0?style=for-the-badge)](#-install)
-[![Languages](https://img.shields.io/badge/UI-English_%2B_Indonesia-F57C00?style=for-the-badge)](README.id.md)
+[![Rust](https://img.shields.io/badge/Rust-single_binary-DEA584?style=for-the-badge&logo=rust&logoColor=black)](https://github.com/Clourynth/CPU-GPU-Temperature-Limiter/tree/main/src)
+[![KernelSU](https://img.shields.io/badge/KernelSU-WebUI-5C6BC0?style=for-the-badge)](#-install)
+[![UI](https://img.shields.io/badge/UI-Material_3_Expressive-6750A4?style=for-the-badge)](https://m3.material.io/blog/building-with-m3-expressive)
 
 [🇮🇩 Baca dalam Bahasa Indonesia](README.id.md)
 
@@ -43,6 +43,7 @@ You pick how warm you are happy with. The module does the rest.
 | | |
 |---|---|
 | 🎛️ **Four ready-made modes** | Power save, Balanced, Performance and Fast, each with its own target temperature. Or set your own. |
+| 🔗 **Scene integration** | Works with the **Scene** app: Scene can switch between the four modes (power save, balanced, performance, fast) and set a preset for each app, so every app automatically gets its own target temperature. |
 | ⚡ **Two tuning styles** | **Aggressive** reacts instantly. **Smooth** avoids sudden jumps in speed, with adjustable settings. |
 | 🕹️ **Low latency option** | Checks the temperature every ~8 ms for the quickest reaction. |
 | 🎮 **GPU limiter** | Cap the GPU's top speed and set a target temperature for it too. Supports **Mali** and (experimental) **Adreno**. |

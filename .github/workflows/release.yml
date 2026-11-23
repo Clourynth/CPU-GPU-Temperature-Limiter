@@ -2,11 +2,17 @@ name: Build module
 
 # Builds the flashable module zip.
 #  - When a GitHub release is published, the zip is attached to that release.
-#  - Run it by hand from the Actions tab to get the zip as a downloadable build artifact.
+#  - Run it by hand from the Actions tab: the build is kept as a downloadable artifact, and if you
+#    type a release tag (for example R.01) in the "tag" box, the zip is attached to that release too.
 on:
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing release tag to attach the zip to (leave empty to only keep the artifact)"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -34,14 +40,23 @@ jobs:
       - name: Package the module
         run: ./package.sh
 
-      - name: Keep the zip as a build artifact
+      - name: Unpack the zip for the artifact
+        run: |
+          mkdir module-files
+          unzip -q CPU_GPU_Temperature_Limiter_*.zip -d module-files
+
+      # Actions always wraps an artifact in a zip. Uploading the module's files (not the zip) means the
+      # zip you download from the run page is itself the flashable module, with no zip inside a zip.
+      - name: Keep the module as a build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: module-zip
-          path: CPU_GPU_Temperature_Limiter_*.zip
+          name: CPU_GPU_Temperature_Limiter
+          path: module-files/
+          if-no-files-found: error
 
       - name: Attach the zip to the release
-        if: github.event_name == 'release'
+        if: github.event_name == 'release' || inputs.tag != ''
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload "${{ github.event.release.tag_name }}" CPU_GPU_Temperature_Limiter_*.zip --clobber
+          TAG: ${{ github.event_name == 'release' && github.event.release.tag_name || inputs.tag }}
+        run: gh release upload "$TAG" CPU_GPU_Temperature_Limiter_*.zip --clobber

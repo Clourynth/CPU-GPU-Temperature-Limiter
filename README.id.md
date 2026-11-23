@@ -4,12 +4,12 @@
 
 **Jaga ponsel tetap adem tanpa menebak-nebak.** Tentukan suhu target, dan modul ini diam-diam mengatur kecepatan CPU dan GPU agar tetap di bawahnya, semuanya lewat WebUI yang bersih dan modern.
 
-[![Versi](https://img.shields.io/badge/versi-R.01-00796B?style=for-the-badge)](CHANGELOG.md)
+[![Versi](https://img.shields.io/badge/versi-R.01-00796B?style=for-the-badge)](https://github.com/Clourynth/CPU-GPU-Temperature-Limiter/releases)
 [![Lisensi](https://img.shields.io/badge/lisensi-GPLv3-blue?style=for-the-badge)](LICENSE)
 [![Android](https://img.shields.io/badge/Android-arm64-3DDC84?style=for-the-badge&logo=android&logoColor=white)](#-kompatibilitas)
-[![Rust](https://img.shields.io/badge/Rust-satu_binary-DEA584?style=for-the-badge&logo=rust&logoColor=black)](#-cara-kerja)
-[![KernelSU](https://img.shields.io/badge/KernelSU-Next_%2B_WebUI-5C6BC0?style=for-the-badge)](#-instalasi)
-[![Bahasa](https://img.shields.io/badge/UI-English_%2B_Indonesia-F57C00?style=for-the-badge)](README.md)
+[![Rust](https://img.shields.io/badge/Rust-satu_binary-DEA584?style=for-the-badge&logo=rust&logoColor=black)](https://github.com/Clourynth/CPU-GPU-Temperature-Limiter/tree/main/src)
+[![KernelSU](https://img.shields.io/badge/KernelSU-WebUI-5C6BC0?style=for-the-badge)](#-instalasi)
+[![UI](https://img.shields.io/badge/UI-Material_3_Expressive-6750A4?style=for-the-badge)](https://m3.material.io/blog/building-with-m3-expressive)
 
 [🇬🇧 Read in English](README.md)
 
@@ -43,6 +43,7 @@ Anda yang menentukan batas suhu yang nyaman. Sisanya diurus modul.
 | | |
 |---|---|
 | 🎛️ **Empat mode siap pakai** | Hemat daya, Seimbang, Performa, dan Cepat, masing-masing dengan suhu target sendiri. Atau atur sendiri. |
+| 🔗 **Integrasi Scene** | Berjalan bersama aplikasi **Scene**: Scene bisa berganti antara empat mode (hemat daya, seimbang, performa, cepat) dan mengatur preset untuk tiap aplikasi, sehingga setiap aplikasi otomatis punya suhu target sendiri. |
 | ⚡ **Dua gaya penyetelan** | **Aggressive** bereaksi seketika. **Smooth** menghindari lonjakan kecepatan mendadak, dengan pengaturan yang bisa diubah. |
 | 🕹️ **Opsi latensi rendah** | Cek suhu tiap ~8 ms untuk reaksi tercepat. |
 | 🎮 **Limiter GPU** | Batasi kecepatan tertinggi GPU dan atur suhu targetnya. Mendukung **Mali** dan (eksperimental) **Adreno**. |

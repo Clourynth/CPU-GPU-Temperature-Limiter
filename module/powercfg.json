@@ -1,0 +1,13 @@
+{
+    "name": "CPU & GPU Temperature Limiter",
+    "author": "Clourynth - Credits to nakixii & ahmed-alnassif",
+    "version": "R.01",
+    "versionCode": 1,
+    "features": {
+        "strict": true,
+        "pedestal": true
+    },
+    "module": "cpu_limiter",
+    "state": "/sdcard/Android/naki/clmt/clmt_mode",
+    "entry": "/data/powercfg.sh"
+}

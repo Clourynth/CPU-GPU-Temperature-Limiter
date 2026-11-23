@@ -1,0 +1,17 @@
+[package]
+name = "cpu_limiter"
+version = "0.1.0"
+edition = "2021"
+license = "GPL-3.0-or-later"
+authors = ["Clourynth"]
+description = "CPU & GPU temperature limiter (Rust; based on nakixii's Magisk_CPULimiter)"
+
+[dependencies]
+libc = "0.2"
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
